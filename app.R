@@ -983,7 +983,7 @@ server <- function(input, output, session) {
       }
       
       if(valid) {
-        print(as.formula(paste(input$response, paste(" ~ ", paste(input$predictor, collapse= "+")))))
+        
         model <- randomForest(as.formula(paste(input$response, paste(" ~ ", paste(input$predictor, collapse= "+")))), 
                               data = forbesTrain, 
                               importance = TRUE, 
@@ -1043,7 +1043,7 @@ server <- function(input, output, session) {
       }
       
       if(valid) {
-        print(as.formula(paste(input$response2, paste(" ~ ", paste(input$predictor2, collapse= "+")))))
+        
         model2 <- lm(as.formula(paste(input$response2, paste(" ~ ", paste(input$predictor2, collapse= "+")))), 
                      data = forbesTrain)
         
@@ -1099,7 +1099,7 @@ server <- function(input, output, session) {
       }
       
       if(valid) {
-        print(as.formula(paste(input$response2, paste(" ~ ", paste(input$predictor2, collapse= "+")))))
+        
         model2 <- lm(as.formula(paste(input$response2, paste(" ~ ", paste(input$predictor2, collapse= "+")))), 
                      data = forbesTrain)
         
@@ -1147,7 +1147,7 @@ server <- function(input, output, session) {
       }
       
       if(valid) {
-        print(as.formula(paste(input$response, paste(" ~ ", paste(input$predictor, collapse= "+")))))
+        
         model <- randomForest(as.formula(paste(input$response, paste(" ~ ", paste(input$predictor, collapse= "+")))), 
                               data = forbesTrain, 
                               importance = TRUE, 
@@ -1200,7 +1200,7 @@ server <- function(input, output, session) {
                }
                
                if(valid) {
-                 print(as.formula(paste(input$response, paste(" ~ ", paste(input$predictor, collapse= "+")))))
+                 
                  model <- randomForest(as.formula(paste(input$response, paste(" ~ ", paste(input$predictor, collapse= "+")))), 
                                        data = forbesTrain, 
                                        importance = TRUE, 
@@ -1249,7 +1249,7 @@ server <- function(input, output, session) {
                }
                
                if(valid) {
-                 print(as.formula(paste(input$response2, paste(" ~ ", paste(input$predictor2, collapse= "+")))))
+                 
                  model2 <- lm(as.formula(paste(input$response2, paste(" ~ ", paste(input$predictor2, collapse= "+")))), 
                               data = forbesTrain)
                  
