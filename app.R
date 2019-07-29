@@ -1169,7 +1169,7 @@ server <- function(input, output, session) {
   )
   
   output$ex1 <- renderUI({
-    withMathJax(helpText('Note: the slope of the predictor variables is represented with this symbol: $$\\beta$$'))
+    withMathJax(helpText('Note: with the linear model depending on the variables selected our formula looks like this: y = x*$$\\beta$$'))
   })
   
   
