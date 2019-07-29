@@ -1,3 +1,4 @@
+#this read in the libraries
 library(shinydashboard)
 library(tidyverse)
 library(DT)
@@ -5,15 +6,17 @@ library(plotly)
 library(knitr)
 library(ape)
 
-
+#this read in the datafile and has it as a dataframe
 forbes <- read_csv("Forbes2000.csv")
 forbes <- as.data.frame(forbes)
 
 
 
-
+#user interface
 ui <- dashboardPage(
+  #Title of dashboard is Forbes 2000 Analysis
   dashboardHeader(title = "Forbes 2000 Analysis"),
+  #These are the different tabs of the dashboard
   dashboardSidebar(
     sidebarMenu(
       menuItem("Introduction", tabName = "dashboard", icon = icon("dashboard")),
@@ -27,7 +30,7 @@ ui <- dashboardPage(
     )
   ),
   dashboardBody(
-    # First tab content
+    #This is the first tab: Introduction. It goes to explain what each tab does. 
     tabItems(
       tabItem(tabName = "dashboard",
               h1("About the Data"),
@@ -45,16 +48,17 @@ ui <- dashboardPage(
                 tabPanel("Tree Modeling",
                          h4("This tab is another prediction method that allows the user to input multiple predictor variables and it uses Random Forest to predict the response. It shows a plot of the prediction error based on number of trees. It starts off blank, and as you add predictors a plot populates. Only thing this is if your response and predictor are the same it will remain blank. Also there is another table with average prediction values.")),
                 tabPanel("Clustering",
-                         h4("This tab looks at two clustering methods: PCA and hiearchial clustering. It allows the user to pick which method to investigate. If PCA, it allows the user to select which two PCs to pick and populates a biplot and if clusters then it takes a random sample and does a denrogram.")),
+                         h4("This tab looks at two clustering methods: PCA and hiearchial clustering. It allows the user to pick which method to investigate. If PCA, it allows the user to select which two PCs to pick and populates a biplot and if clusters then it takes a random sample and does a denrogram. The cluster graphs use all the data, so the raw data on the next tab can be used to get the data used for that plot.")),
                 tabPanel("Raw Data",
                          h4("This shows the raw data which you can export to a csv by clicking on the button. Below is the link for more description on forbes and where this data came from."))
               ),
               
               fluidPage(
-                uiOutput("tab"),
+                #this shows the link that explains more about the variables of the data. 
+                uiOutput("url"),
                 #h4("In this data we use a linear form in this form: "),
                 withMathJax(),
-                uiOutput('ex1')
+                uiOutput('equation')
                 
               )
               
@@ -62,16 +66,21 @@ ui <- dashboardPage(
               
               
       ),
-      #second tab
+      #This is the second tab: Numerical summaries. We have the user select either a scatter plot or histogram. Based on the selection it allows you to select numeric variables and outputs based on those selections. 
       
       
       tabItem(tabName = "Graph",
+              #title of tab
               h1("Numerical Summaries"),
               fluidRow(
                 
+                #outputs plot
                 box(plotOutput('plot1')),
                 
-                
+                #controls
+                #first asks if you want scatter plot or histogram
+                #next asks variables you want. 
+                #also allows user to download plot
                 box(
                   title = "Controls",
                   selectInput("plotType", "Plot Type", c(Scatter = "scatter", Histogram = "histogram")),
@@ -86,7 +95,12 @@ ui <- dashboardPage(
                     selectInput("dataset6","Choose second variable: ",
                                 choices = c("sales", "profits", "assets", "marketvalue")),
                     
-                    downloadButton('downloadPlot', 'Download Plot')
+                    downloadButton('downloadPlot', 'Download Plot'),
+                    
+                    
+                    
+                    downloadButton('downloadData3', 'Download Data')
+                    
                   ),
                   
                   conditionalPanel(
@@ -95,7 +109,8 @@ ui <- dashboardPage(
                     selectInput("dataset3", "Choose variable: ",
                                 choices = c("sales", "profits", "assets", "marketvalue")),
                     
-                    downloadButton('downloadPlot7', 'Download Plot')
+                    downloadButton('downloadPlot7', 'Download Plot'),
+                    downloadButton('downloadData4', 'Download Data')
                     
                   )
                   
@@ -118,19 +133,23 @@ ui <- dashboardPage(
       
       
       
-      
+      #This is the second tab: Categorical Summaries
       tabItem(tabName = "Graph2",
+              #title is Categorical Summaries
               h1("Categorical Summaries"),
+              #outputs barplot and allows user to hover over and see how many are in each barplot. 
               fluidRow(plotlyOutput("plot2"),
                        verbatimTextOutput("event")),
               
               box(
+                #below the barplot is raw data table that you can filter to each specific category. 
                 title = "Table Drill Down",
                 selectInput("tableType", "Select a category to drill down the table: ",
                             choices = c("Utilities", "Transportation", "Trading companies", "Telecommunications services", "Technology hardware & equipment", "Software & services", "Semiconductors", "Retailing", "Oil & gas operations", "Media", "Materials", "Insurance", "Household & personal products", "Hotels restaurants & services", "Food markets", "Food drink & tobacco", "Drugs & biotechnology", "Diversified financials", "Consumer durables", "Construction", "Conglomerates", "Chemicals", "Capital goods", "Business services & supplies", "Banking", "Aerospace & defense")),
                 downloadButton("downloadData", "Download")
               ),
               
+              #data table
               DT::dataTableOutput("table")
               
               
@@ -142,15 +161,19 @@ ui <- dashboardPage(
       
       
       
-      #Another tab for modeling
+      #This is the third tab: Linear Modeling
       tabItem(tabName = "Linear_Model",
+              #name of tab: Linear Modeling
               h1("Linear Modeling"),
               fluidRow(
+                #outputs diagnostics plots of the linear model based on selections. 
                 box(plotOutput("plot7")),
                 
                 
                 
                 box(
+                  #allows user to select one response and multiple predictor variables. 
+                  #also allows user to download plots
                   title = "Controls", 
                   selectInput("response2", "response to predict: ",
                               choices = c("sales", "profits", "assets", "marketvalue")),
@@ -161,24 +184,32 @@ ui <- dashboardPage(
                                        "Profits" = "profits",
                                        "Assets" = "assets",
                                        "Marketvalue" = "marketvalue")),
-                  downloadButton('downloadPlot6', 'Download Plot')
+                  downloadButton('downloadPlot6', 'Download Plot'),
+                  downloadButton('downloadData5', 'Download Data from Plot')
                   
                 ),
-                box(h2("Average Predicted Value"),
+                #outputs table of predicted values 
+                box( h2("Table of predicted values"),
                     tableOutput("table6"))
                 
                 
               )
       ),
       
+      #This is the fourth tab: Tree Modeling
       tabItem(tabName = "Tree_Model",
+              #title of tab: Tree Modeling
               h1("Tree Modeling"),
               fluidRow(
+                #outputs plot of random forest model
                 box(plotOutput("plot6")
                 ),
                 
                 box(
                   title = "Controls",
+                  #allows user to select one response and multiple predictor variables
+                  #allows user to input a number between 50 and 1000 and produces the plot based on the number of trees
+                  #also allows user to save plot
                   selectInput("response", "response to predict: ",
                               choices = c("sales", "profits", "assets", "marketvalue")),
                   
@@ -191,22 +222,31 @@ ui <- dashboardPage(
                   
                   
                   numericInput("numbertype2", "Insert number of trees between 50 and 1000: ", 50, min = 50, max = 1000),
-                  downloadButton('downloadPlot5', 'Download Plot')
+                  downloadButton('downloadPlot5', 'Download Plot'),
+                  downloadButton('downloadData6', 'Download Data from Plot')
+                  
+                  
+                  
                 ),
                 
                 
-                box(h2("Average Predicted Value"),
-                    tableOutput("table5"))
+                box( h2("Table of predicted values"),
+                  tableOutput("table5"))
+                
+                
+                
               )),
       
-      
+      #This is the fifth tab: Cluster Analysis
       tabItem(tabName = "Cluster",
+              #title of tab: Cluster Analysis
               h1("Cluster Analysis"),
               
               fluidRow(
                 
                 
-                
+                #allows user to select either PCA or Cluster. Based on the selection, allows user to create a biplot or hiearchial clustering
+                #also allows users to download plots
                 box(
                   title = "Controls",
                   selectInput("PlotType2", "PCA or Cluster", c(PCA = "pca", Cluster = "cluster")),
@@ -216,6 +256,8 @@ ui <- dashboardPage(
                     selectInput("PCType1", "Pick a PC: ", c(one = "one", two = "two", three = "three", four = "four")),
                     selectInput("PCType2", "Pick another PC: ", c(one = "one", two = "two", three = "three", four = "four")),
                     downloadButton('downloadPlot2', 'Download Plot'),
+                    
+                    
                     box(plotOutput("plot3"),height=500,width=450)
                     
                     
@@ -230,6 +272,7 @@ ui <- dashboardPage(
                     selectInput("ClusterType1", "Pick one of the following cluster methods: ", c(single = "single", complete = "complete", average = "average")),
                     numericInput("NumericType1", "Insert a sample size between 50 and 300: ", 50, min = 50, max = 300),
                     downloadButton('downloadPlot3', 'Download Plot'),
+                    
                     box(plotOutput("plot4"), height = 500, width = 450)
                   )
                   
@@ -240,9 +283,12 @@ ui <- dashboardPage(
               )
       ),
       
+      #This is the sixth tab: Raw Data
       tabItem(tabName = "Raw",
+              #Title of tab: Raw Data
               h1("Raw Data"),
               fluidRow(
+                #allows users to download raw data
                 box (title = "Controls",
                      downloadButton("downloadData2", "Download")),
                 
@@ -259,16 +305,16 @@ ui <- dashboardPage(
 server <- function(input, output, session) {
   
   
-  
+  #outputs url
   url <- a("Forbes Homepage", href = "https://vincentarelbundock.github.io/Rdatasets/doc/HSAUR/Forbes2000.html")
-  output$tab <- renderUI({
+  output$url <- renderUI({
     tagList("This link takes you to see more information about the column variables in this forbes dataset:", url)
   })
   
   
   
   
-  
+ #outputs plot for numerical summaries
   output$plot1 <- renderPlot({
     
     
@@ -364,6 +410,7 @@ server <- function(input, output, session) {
     
   })
   
+  #donwloads scatter plot
   output$downloadPlot <- downloadHandler(
     
     
@@ -435,36 +482,64 @@ server <- function(input, output, session) {
         
       }
       
-      else if (input$plotType == "histogram"){
-        
-        
-        
-        
-        if (input$dataset3 == "sales"){
-          g <- ggplot(data = forbes, aes(x = sales))
-          g + geom_histogram(binwidth=1) + geom_vline(aes(xintercept=mean(sales)),col='red',size=2)
-        }
-        
-        else if (input$dataset3 == "profits"){
-          g <- ggplot(data = forbes, aes(x = profits))
-          g + geom_histogram(binwidth=1) + geom_vline(aes(xintercept=mean(profits)),col='red',size=2)
-        }
-        
-        else if (input$dataset3 == "assets"){
-          g <- ggplot(data = forbes, aes(x = assets))
-          g + geom_histogram(binwidth=1) + geom_vline(aes(xintercept=mean(assets)),col='red',size=2)
-        }
-        
-        else if (input$dataset3 == "marketvalue"){
-          g <- ggplot(data = forbes, aes(x = marketvalue))
-          g + geom_histogram(binwidth=1) + geom_vline(aes(xintercept=mean(marketvalue)),col='red',size=2)
-        }
-      }
+      
       
       )
     }
   )
   
+  output$downloadData3 <- downloadHandler(
+    filename = function() {
+      "data.csv"
+    },
+    content = function(file) {
+      
+      forbes2 <- forbes %>% select(input$dataset5,input$dataset6)
+      
+      write_csv(forbes2, file)
+    }
+  )
+  
+  output$downloadData4 <- downloadHandler(
+    filename = function() {
+      "data.csv"
+    },
+    content = function(file) {
+      
+      forbes2 <- forbes %>% select(input$dataset3)
+      
+      write_csv(forbes2, file)
+    }
+  )
+  
+  
+  output$downloadData5 <- downloadHandler(
+    filename = function() {
+      "data.csv"
+    },
+    content = function(file) {
+      
+      forbes2 <- forbes %>% select(input$response2,input$predictor2)
+      
+      write_csv(forbes2, file)
+    }
+  )
+  
+  output$downloadData6 <- downloadHandler(
+    filename = function() {
+      "data.csv"
+    },
+    content = function(file) {
+      
+      forbes2 <- forbes %>% select(input$response,input$predictor)
+      
+      write_csv(forbes2, file)
+    }
+  )
+  
+  
+  
+  #downloads histogram
   output$downloadPlot7 <- downloadHandler(
     
     
@@ -507,10 +582,12 @@ server <- function(input, output, session) {
   )
   
   
+  #outputs barplot
   output$plot2 <- renderPlotly({
     g <- ggplot(data = forbes, aes(x = category))
     g + geom_bar() + theme(axis.text.x = element_text(angle=90, hjust=1)) 
   })
+  
   
   output$event <- renderPrint({
     d <- event_data("plotly_hover")
@@ -518,17 +595,17 @@ server <- function(input, output, session) {
   })
   
   
-  
+  #outputs data table for bar plot
   output$table <- DT::renderDataTable({
     forbes2 <- forbes %>% filter(category == input$tableType)
-    exportTable = forbes2
+    
     forbes2
     
     
   })
   
   
-  
+  #downloads filtered data to a csv
   output$downloadData <- downloadHandler(
     filename = function() {
       "data.csv"
@@ -540,6 +617,7 @@ server <- function(input, output, session) {
     }
   )
   
+  #downloads raw data
   output$downloadData2 <- downloadHandler(
     filename = function() {
       "data.csv"
@@ -551,14 +629,17 @@ server <- function(input, output, session) {
     }
   )
   
+ 
   
   
   
   
+  #raw data table
   output$table2 <- DT::renderDataTable({
     forbes
   })
   
+  #outputs biplot
   output$plot3 <- renderPlot({
     forbes2 <- forbes %>% select(sales, profits, assets, marketvalue) 
     PCs <- prcomp(na.omit(forbes2), center = TRUE, scale = TRUE)
@@ -591,6 +672,7 @@ server <- function(input, output, session) {
     
   })
   
+  #downloads biplot
   output$downloadPlot2 <- downloadHandler(
     filename = function() { paste(test, '.png', sep='') 
       
@@ -624,7 +706,7 @@ server <- function(input, output, session) {
   )
   
   
-  
+  #outputs hierarchy cluster
   output$plot4 <- renderPlot({
     
     set.seed(1)
@@ -685,6 +767,7 @@ server <- function(input, output, session) {
     
   })
   
+  #download hierarchial cluster
   output$downloadPlot3 <- downloadHandler(
     filename = function() { paste(test, '.png', sep='') 
       
@@ -749,6 +832,7 @@ server <- function(input, output, session) {
     }
   )
   
+  #outputs scatterplot with linear regression line
   output$plot5 <- renderPlot({
     
     forbes4 <- na.omit(forbes)
@@ -807,7 +891,7 @@ server <- function(input, output, session) {
   })
   
   
-  
+  #downloads scatterplot
   output$downloadPlot4 <- downloadHandler(
     filename = function() { paste(test, '.png', sep='') },
     content = function(file) {
@@ -867,6 +951,7 @@ server <- function(input, output, session) {
   )
   
   
+  #outputs plot for random forest
   output$plot6 <- renderPlot({
     library(randomForest)
     library(party)
@@ -927,6 +1012,7 @@ server <- function(input, output, session) {
     
   })
   
+  #outputs plot for linear model
   output$plot7 <- renderPlot({
     
     
@@ -983,10 +1069,9 @@ server <- function(input, output, session) {
     
     
   })
+  
+  #average prediction value for each predictor variable selected
   output$table6 <- renderTable({
-    library(randomForest)
-    library(party)
-    #library(reprtree)
     
     
     forbes3 <- na.omit(forbes) 
@@ -1019,7 +1104,7 @@ server <- function(input, output, session) {
                      data = forbesTrain)
         
         model_predict2 <- predict(model2, newdata = forbesTest)
-        table(mean(model_predict2))
+        model_predict2
         
         
         
@@ -1030,6 +1115,7 @@ server <- function(input, output, session) {
     }
   })
   
+  #average predicion based on predictor variables
   output$table5 <- renderTable({
     library(randomForest)
     library(party)
@@ -1069,7 +1155,8 @@ server <- function(input, output, session) {
                               mtry =  ncol(forbesTrain)/3)
         
         model_predict <- predict(model, newdata = forbesTest)
-        table(mean(model_predict))
+        model_predict
+        
         
         
         
@@ -1080,6 +1167,9 @@ server <- function(input, output, session) {
     }
   })
   
+  
+  
+  #downloads data for random forest
   output$downloadPlot5 <- downloadHandler(
     filename = function() { paste(test, '.png', sep='') },
     content = function(file) {
@@ -1126,6 +1216,11 @@ server <- function(input, output, session) {
     }
   )
   
+  
+  
+  
+  
+  #downloads plot for linear model
   output$downloadPlot6 <- downloadHandler(
     filename = function() { paste(test, '.png', sep='') },
     content = function(file) {
@@ -1168,11 +1263,14 @@ server <- function(input, output, session) {
     }
   )
   
-  output$ex1 <- renderUI({
+  #math jax to show that beta is the coefficient for the linear model. 
+  output$equation <- renderUI({
     withMathJax(helpText('Note: with the linear model depending on the variables selected our formula looks like this: y = x*$$\\beta$$'))
+    
   })
   
   
 }
 
 shinyApp(ui, server)
+#shiny::runGitHub('ST558FinalExam','SophiaMelenikiotis')
