@@ -33,7 +33,7 @@ ui <- dashboardPage(
     #This is the first tab: Introduction. It goes to explain what each tab does. 
     tabItems(
       tabItem(tabName = "dashboard",
-              h1("About the Data"),
+              h1("About the Data", style = "color: black; font-weight: bold"),
               h2("This data came from the forbes 2000 database. It looks at companies from around the world and compares their profits, sales, assets, and marketvalue. The link at the bottom shows you more information about each variable."),
               tabsetPanel(
                 tabPanel("Numerical Summaries",
@@ -71,7 +71,7 @@ ui <- dashboardPage(
       
       tabItem(tabName = "Graph",
               #title of tab
-              h1("Numerical Summaries"),
+              h1("Numerical Summaries",style = "color: black; font-weight: bold"),
               fluidRow(
                 
                 #outputs plot
@@ -136,7 +136,7 @@ ui <- dashboardPage(
       #This is the second tab: Categorical Summaries
       tabItem(tabName = "Graph2",
               #title is Categorical Summaries
-              h1("Categorical Summaries"),
+              h1("Categorical Summaries",style = "color: black; font-weight: bold"),
               #outputs barplot and allows user to hover over and see how many are in each barplot. 
               fluidRow(plotlyOutput("plot2"),
                        verbatimTextOutput("event")),
@@ -164,7 +164,7 @@ ui <- dashboardPage(
       #This is the third tab: Linear Modeling
       tabItem(tabName = "Linear_Model",
               #name of tab: Linear Modeling
-              h1("Linear Modeling"),
+              h1("Linear Modeling",style = "color: black; font-weight: bold"),
               fluidRow(
                 #outputs diagnostics plots of the linear model based on selections. 
                 box(plotOutput("plot7")),
@@ -199,7 +199,7 @@ ui <- dashboardPage(
       #This is the fourth tab: Tree Modeling
       tabItem(tabName = "Tree_Model",
               #title of tab: Tree Modeling
-              h1("Tree Modeling"),
+              h1("Tree Modeling",style = "color: black; font-weight: bold"),
               fluidRow(
                 #outputs plot of random forest model
                 box(plotOutput("plot6")
@@ -240,7 +240,7 @@ ui <- dashboardPage(
       #This is the fifth tab: Cluster Analysis
       tabItem(tabName = "Cluster",
               #title of tab: Cluster Analysis
-              h1("Cluster Analysis"),
+              h1("Cluster Analysis",style = "color: black; font-weight: bold"),
               
               fluidRow(
                 
@@ -286,7 +286,7 @@ ui <- dashboardPage(
       #This is the sixth tab: Raw Data
       tabItem(tabName = "Raw",
               #Title of tab: Raw Data
-              h1("Raw Data"),
+              h1("Raw Data",style = "color: black; font-weight: bold"),
               fluidRow(
                 #allows users to download raw data
                 box (title = "Controls",
@@ -1070,7 +1070,7 @@ server <- function(input, output, session) {
     
   })
   
-  #average prediction value for each predictor variable selected
+  #table of predicted values: linear model
   output$table6 <- renderTable({
     
     
@@ -1115,7 +1115,7 @@ server <- function(input, output, session) {
     }
   })
   
-  #average predicion based on predictor variables
+  #table for predicted values: random forest model
   output$table5 <- renderTable({
     library(randomForest)
     library(party)
