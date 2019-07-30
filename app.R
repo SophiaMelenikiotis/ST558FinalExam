@@ -50,7 +50,7 @@ ui <- dashboardPage(
                 tabPanel("Clustering",
                          h4("This tab looks at two clustering methods: PCA and hiearchial clustering. It allows the user to pick which method to investigate. If PCA, it allows the user to select which two PCs to pick and populates a biplot and if clusters then it takes a random sample and does a denrogram. The cluster graphs use all the data, so the raw data on the next tab can be used to get the data used for that plot.")),
                 tabPanel("Raw Data",
-                         h4("This shows the raw data which you can export to a csv by clicking on the button. Below is the link for more description on forbes and where this data came from."))
+                         h4("This shows the raw data which you can export to a csv by clicking on the button."))
               ),
               
               fluidPage(
