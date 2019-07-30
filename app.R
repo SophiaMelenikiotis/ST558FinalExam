@@ -41,7 +41,7 @@ ui <- dashboardPage(
                 tabPanel("Categorical Summaries",
                          h4("This tab is a barplot that shows the distribution of each company category in the forbes data set.")),
                 tabPanel("Linear Modeling",
-                         h4("This tab performs linear regression on the dataset. It allows the user to choose one response variable and multiple predictor varaibles. Based on the choices it outputs a summary plot of the linear model. At the right there is a table with the predicted values for the test. If your response and predictor variables are blank or response equals predictor variable then nothing populates.")),
+                         h4("This tab performs linear regression on the dataset. It allows the user to choose one response variable and multiple predictor varaibles. Based on the choices it outputs a summary plot of the linear model. At the right there is a table with the predicted values for the test set. If your response and predictor variables are blank or response equals predictor variable then nothing populates.")),
                 
                 
                 
