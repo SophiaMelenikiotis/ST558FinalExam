@@ -41,12 +41,12 @@ ui <- dashboardPage(
                 tabPanel("Categorical Summaries",
                          h4("This tab is a barplot that shows the distribution of each company category in the forbes data set.")),
                 tabPanel("Linear Modeling",
-                         h4("This tab performs linear regression on the dataset. It allows the user to choose one response variable and multiple predictor varaibles. Based on the choices it outputs a summary plot of the linear model. At the right there is an average of the predictions. If your response and predictor variables are blank then nothing populates.")),
+                         h4("This tab performs linear regression on the dataset. It allows the user to choose one response variable and multiple predictor varaibles. Based on the choices it outputs a summary plot of the linear model. At the right there is a table with predicted values of the test set. The data was split into 80% training and 20% test sets. If your response and predictor variables are blank then nothing populates.")),
                 
                 
                 
                 tabPanel("Tree Modeling",
-                         h4("This tab is another prediction method that allows the user to input multiple predictor variables and it uses Random Forest to predict the response. It shows a plot of the prediction error based on number of trees. It starts off blank, and as you add predictors a plot populates. Only thing this is if your response and predictor are the same it will remain blank. Also there is another table with average prediction values.")),
+                         h4("This tab is another prediction method that allows the user to input multiple predictor variables and it uses Random Forest to predict the response. It shows a plot of the prediction error based on number of trees. It starts off blank, and as you add predictors a plot populates. Only thing this is if your response and predictor are the same it will remain blank. Also there is a table that shows the predicted values for the test set. The data was also split into 80% training and 20% test set.")),
                 tabPanel("Clustering",
                          h4("This tab looks at two clustering methods: PCA and hiearchial clustering. It allows the user to pick which method to investigate. If PCA, it allows the user to select which two PCs to pick and populates a biplot and if clusters then it takes a random sample and does a denrogram. The cluster graphs use all the data, so the raw data on the next tab can be used to get the data used for that plot.")),
                 tabPanel("Raw Data",
