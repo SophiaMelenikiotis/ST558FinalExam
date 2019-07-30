@@ -41,12 +41,12 @@ ui <- dashboardPage(
                 tabPanel("Categorical Summaries",
                          h4("This tab is a barplot that shows the distribution of each company category in the forbes data set.")),
                 tabPanel("Linear Modeling",
-                         h4("This tab performs linear regression on the dataset. It allows the user to choose one response variable and multiple predictor varaibles. Based on the choices it outputs a summary plot of the linear model. At the right there is a table with the predicted values for the test set. If your response and predictor variables are blank or response equals predictor variable then nothing populates.")),
+                         h4("This tab performs linear regression on the dataset. It allows the user to choose one response variable and multiple predictor varaibles. Based on the choices it outputs a summary plot of the linear model. At the right there is an average of the predictions. If your response and predictor variables are blank then nothing populates.")),
                 
                 
                 
                 tabPanel("Tree Modeling",
-                         h4("This tab is another prediction method that allows the user to input multiple predictor variables and it uses Random Forest to predict the response. It shows a plot of the prediction error based on number of trees. It starts off blank, and as you add predictors a plot populates. Only thing this is if your response and predictor are the same it will remain blank. Also there is another table with the predicted values from the test set.")),
+                         h4("This tab is another prediction method that allows the user to input multiple predictor variables and it uses Random Forest to predict the response. It shows a plot of the prediction error based on number of trees. It starts off blank, and as you add predictors a plot populates. Only thing this is if your response and predictor are the same it will remain blank. Also there is another table with average prediction values.")),
                 tabPanel("Clustering",
                          h4("This tab looks at two clustering methods: PCA and hiearchial clustering. It allows the user to pick which method to investigate. If PCA, it allows the user to select which two PCs to pick and populates a biplot and if clusters then it takes a random sample and does a denrogram. The cluster graphs use all the data, so the raw data on the next tab can be used to get the data used for that plot.")),
                 tabPanel("Raw Data",
@@ -55,7 +55,9 @@ ui <- dashboardPage(
               
               fluidPage(
                 #this shows the link that explains more about the variables of the data. 
-                uiOutput("url"),
+                #uiOutput("url"),
+                h5("This link takes you to see more information about the column variables in this forbes dataset:",
+                   a("Forbes Homepage", href = "https://vincentarelbundock.github.io/Rdatasets/doc/HSAUR/Forbes2000.html")),
                 #h4("In this data we use a linear form in this form: "),
                 withMathJax(),
                 uiOutput('equation')
@@ -416,7 +418,7 @@ server <- function(input, output, session) {
     
     
     
-    filename = function() { paste(test, '.png', sep='') },
+    filename = function() { paste(input$dataset5, '.png', sep='') },
     content = function(file) {
       
       
@@ -545,7 +547,7 @@ server <- function(input, output, session) {
     
     
     
-    filename = function() { paste(test, '.png', sep='') },
+    filename = function() { paste(input$dataset3, '.png', sep='') },
     content = function(file) {
       
       
@@ -674,7 +676,7 @@ server <- function(input, output, session) {
   
   #downloads biplot
   output$downloadPlot2 <- downloadHandler(
-    filename = function() { paste(test, '.png', sep='') 
+    filename = function() { paste(input$PCType1, '.png', sep='') 
       
     },
     content = function(file) {
@@ -769,7 +771,7 @@ server <- function(input, output, session) {
   
   #download hierarchial cluster
   output$downloadPlot3 <- downloadHandler(
-    filename = function() { paste(test, '.png', sep='') 
+    filename = function() { paste(input$ClusterType1, '.png', sep='') 
       
     },
     content = function(file) {
@@ -893,7 +895,7 @@ server <- function(input, output, session) {
   
   #downloads scatterplot
   output$downloadPlot4 <- downloadHandler(
-    filename = function() { paste(test, '.png', sep='') },
+    filename = function() { paste(input$dataset5, '.png', sep='') },
     content = function(file) {
       forbes4 <- na.omit(forbes)
       ggsave(file,if ((input$dataset5 == "sales" && input$dataset6 == "profits") || (input$dataset5 == "profits" && input$dataset6 == "sales")){
@@ -1147,7 +1149,7 @@ server <- function(input, output, session) {
       }
       
       if(valid) {
-        
+       
         model <- randomForest(as.formula(paste(input$response, paste(" ~ ", paste(input$predictor, collapse= "+")))), 
                               data = forbesTrain, 
                               importance = TRUE, 
@@ -1171,7 +1173,7 @@ server <- function(input, output, session) {
   
   #downloads data for random forest
   output$downloadPlot5 <- downloadHandler(
-    filename = function() { paste(test, '.png', sep='') },
+    filename = function() { paste(input$predictor, '.png', sep='') },
     content = function(file) {
       library(randomForest)
       library(party)
@@ -1222,7 +1224,7 @@ server <- function(input, output, session) {
   
   #downloads plot for linear model
   output$downloadPlot6 <- downloadHandler(
-    filename = function() { paste(test, '.png', sep='') },
+    filename = function() { paste(input$predictor2, '.png', sep='') },
     content = function(file) {
       
       
