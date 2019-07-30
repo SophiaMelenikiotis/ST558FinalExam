@@ -34,7 +34,7 @@ ui <- dashboardPage(
     tabItems(
       tabItem(tabName = "dashboard",
               h1("About the Data", style = "color: black; font-weight: bold"),
-              h2("This data came from the forbes 2000 database. It looks at companies from around the world and compares their profits, sales, assets, and marketvalue. The link at the bottom shows you more information about each variable."),
+              h2("This data came from the forbes 2000 database. It looks at companies from around the world and compares their profits, sales, assets, and marketvalue. The link at the bottom shows you more information about each variable. Each tab allows you to download the plots and data tables to png or csv."),
               tabsetPanel(
                 tabPanel("Numerical Summaries",
                          h4("This tab has two main options. The first is a scatterplot that looks at correlations of each specified variables. We also see a regression line running through the points. The second options is a histogram that looks at the distribution of of each specified variable.")),
